@@ -31,3 +31,9 @@ from .arrays import create_bell_array, create_bell_meshgrid
 
 # Complex-valued neural networks (pure numpy, no torch required)
 from . import cnn
+from .text_contextuality import (
+    AnaphoricInstance,
+    AnaphoricSchemaExtractor,
+    TextContextualityAnalyzer,
+    CorpusContextualityDataset,
+)
