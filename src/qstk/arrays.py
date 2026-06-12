@@ -8,7 +8,10 @@ import json
 import random
 from typing import List, Dict, Any, Optional, Callable
 
-from npcpy.npc_array import NPCArray
+try:
+    from npcpy.npc_array import NPCArray
+except ImportError:
+    NPCArray = None
 
 from .chsh import (
     compute_chsh_products,
@@ -19,6 +22,11 @@ from .chsh import (
     check_violation,
 )
 from .personas import generate_persona, get_persona_prompt
+
+
+def _require_npcpy():
+    if NPCArray is None:
+        raise ImportError("""npcpy is required for qstk.arrays. Install with: pip install npcpy""")
 
 
 def create_bell_array(
@@ -42,6 +50,7 @@ def create_bell_array(
     ...     {"model": "gemma3:12b", "provider": "ollama"},
     ... ])
     """
+    _require_npcpy()
     return NPCArray.from_matrix(models)
 
 
@@ -81,6 +90,7 @@ def create_bell_meshgrid(
     ...     top_ks=[10, 50, 100],
     ... )
     """
+    _require_npcpy()
     kwargs = {
         "model": models,
         "provider": providers,
@@ -125,6 +135,7 @@ def run_bell_trial_array(
         - "raw_responses": dict of setting -> raw string
         - "complete": bool
     """
+    _require_npcpy()
     setting_keys = ["A", "A_prime", "B", "B_prime"]
     prompts = [interpretation_prompt] * len(setting_keys)
 
@@ -194,6 +205,7 @@ def run_bell_grid_array(
     -------
     list of trial result dicts suitable for DataFrame construction.
     """
+    _require_npcpy()
     from .grid import get_param_grid, DEFAULT_PARAM_GRID
 
     all_results = []
@@ -303,5 +315,6 @@ def infer_and_classify(
     -------
     list of classified results (flattened).
     """
+    _require_npcpy()
     results = array.infer(prompts, **infer_kwargs).map(classify_fn).collect()
     return results.flatten()

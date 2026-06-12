@@ -1,12 +1,21 @@
 """CSV logging, result aggregation, and resume infrastructure."""
+from __future__ import annotations
 
 import os
 import datetime
 from typing import List, Dict, Any, Optional
 
-import pandas as pd
+try:
+    import pandas as pd
+except ImportError:
+    pd = None
 
 from .chsh import calculate_expectation_values_density_matrix, calculate_s_value
+
+
+def _require_pandas():
+    if pd is None:
+        raise ImportError("""pandas is required for qstk.results. Install with: pip install pandas""")
 
 
 def init_csv(output_dir: str, filename: str, columns: List[str]) -> str:
@@ -64,6 +73,7 @@ def load_previous_trials(
     -------
     dict keyed by tuple of group values -> count of trials.
     """
+    _require_pandas()
     if not os.path.exists(csv_path):
         return {}
 
@@ -106,6 +116,7 @@ def aggregate_results(
     -------
     DataFrame with one row per group, including S-value and expectation values.
     """
+    _require_pandas()
     if product_cols is None:
         product_cols = ["A_B", "A_B_prime", "A_prime_B", "A_prime_B_prime"]
 
