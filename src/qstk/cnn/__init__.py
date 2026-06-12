@@ -51,7 +51,7 @@ except ImportError:
     pass
 
 try:
-    from .ssm_autograd import ActivityPredictorAutograd
+    from .ssm_autograd import forward_backward, forward_torch
 except ImportError:
     pass
 
@@ -73,13 +73,16 @@ from .operators import (
     creativity_correlation,
 )
 
-# State Space Models (SSM) -- complex-valued selective memory
+# State Space Models (SSM) — functional API, no classes
 from .ssm import (
-    ComplexSSMLayer,
-    ComplexSSM,
-    ActivityPredictor,
-    ActivityPredictorConfig,
+    make_predictor,
+    forward,
+    predict,
+    save,
+    load,
+    shift_base_weights,
     parallel_scan,
     ACTIVITY_TYPES,
     ACTION_TO_IDX,
+    DEFAULT_CONFIG,
 )
