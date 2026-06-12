@@ -50,6 +50,11 @@ try:
 except ImportError:
     pass
 
+try:
+    from .ssm_autograd import ActivityPredictorAutograd
+except ImportError:
+    pass
+
 from .probe import (
     embed_to_complex,
     phase_coherence,
@@ -66,4 +71,15 @@ from .operators import (
     trajectory_coherence,
     compare_temperature_regimes,
     creativity_correlation,
+)
+
+# State Space Models (SSM) -- complex-valued selective memory
+from .ssm import (
+    ComplexSSMLayer,
+    ComplexSSM,
+    ActivityPredictor,
+    ActivityPredictorConfig,
+    parallel_scan,
+    ACTIVITY_TYPES,
+    ACTION_TO_IDX,
 )
